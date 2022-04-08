@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Stack.h"
-#include "Queue.h"
+// #include "Queue.h"
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -10,51 +10,9 @@
 
 using namespace std;
 
-int main(){
-    
-    int numCapsules;  
-    int capacity;
-    Queue queue {};
-    Stack stack {};
-    int overallGuests = 0;
-
-    ifstream infile;
-
-    infile.open("DarkZone.txt");
-    int capsuleSize;
-
-    if (infile)
-    {
-        // gets the capacity of capsule
-        string capsuleSizeString;
-        getline(infile, capsuleSizeString);
-        // convers the string capacity to an integer
-        capsuleSize = stoi(capsuleSizeString);
-    }
-
-    string inputString;
-    int numCapsules = 0;
-
-    while (getline(infile, inputString))
-    {
-        numCapsules++;
-      // tokenize inputString into name and a number
-        string name = inputString.substr(0, inputString.find(" "));
-        string guestAmt = inputString.substr(inputString.find(" ") + 1);
-    }
-
-
-
-    for(int i = 1; i <= numCapsules; i++){
-        int totalGuests = printResults(&stack, i);
-        int remainingCapacity = capacity - totalGuests; 
-        overallGuests += totalGuests;
-        cout << "Remaining Capacity: " << remainingCapacity << endl;
-        cout << endl;
-    }
-
-    printSummary(overallGuests, numCapsules, capacity);
-    return 0;
+float getPercentUtil(int overallGuests, int numCapsules, int capacity){
+    float result = 1.0 * (overallGuests) / (numCapsules *  capacity);
+    return result;
 }
 
 //method to print the contents of the stack in order by popping off each one individually
@@ -78,11 +36,83 @@ void printSummary(int overallGuests, int numCapsules, int capacity){
     cout << "Overall number of capsules: " << numCapsules << endl;
     cout << "Capsule capacity: " << capacity << endl;
     float percentUtil = getPercentUtil(overallGuests, numCapsules, capacity);
-    cout << "Percentage utilization: " << overallGuests << " / (" << numCapsules << " * " << capacity << ") = " << percentUtil << "%" << endl;
+    cout << "Percentage utilization: " << overallGuests << " / (" << numCapsules << " * " << capacity << ") = " << 100.0 * percentUtil << "%" << endl;
 }
 
 
-float getPercentUtil(int overallGuests, int numCapsules, int capacity){
-    float result = static_cast<float>(overallGuests) / static_cast<float> (numCapsules *  capacity);
-    return result;
+
+
+int main(){
+    
+    int numCapsules;  
+    Queue queue {};
+    Stack stack {};
+    int overallGuests = 0;
+
+    ifstream infile;
+
+    infile.open("darkZone.txt");
+    int capsuleSize;
+
+    if (infile)
+    {
+        // gets the capacity of capsule
+        string capsuleSizeString;
+        getline(infile, capsuleSizeString);
+        // convers the string capacity to an integer
+        capsuleSize = stoi(capsuleSizeString);
+    }
+
+    string inputString;
+    int numGroups = 0;
+
+    while (getline(infile, inputString))
+    {
+        numGroups++;
+      // tokenize inputString into name and a number
+        string name = inputString.substr(0, inputString.find(" "));
+        string guestAmt = inputString.substr(inputString.find(" ") + 1);
+        overallGuests += stoi(guestAmt);
+        Node *toAdd = new Node(nullptr, name, stoi(guestAmt));
+        queue.enqueue(toAdd);
+    }
+
+
+
+
+    numCapsules = 0;
+    while (!queue.isEmpty()) {
+        numCapsules++;
+        // schedule new capsule
+        int totalGuestsOnCapsule = 0;
+        while (!queue.isEmpty() 
+            && totalGuestsOnCapsule + queue.peekNextGroup() <= capsuleSize) 
+        {
+            totalGuestsOnCapsule += queue.peekNextGroup();
+            stack.push(queue.dequeue());
+        }
+        cout << "Capsule #" << numCapsules << endl;
+        while (!stack.isEmpty()) {
+            Node *popResult = stack.pop();
+            cout << popResult->getString() << " " 
+                << popResult->getInt() << endl;
+        }
+        cout << "Total guests: " << totalGuestsOnCapsule << endl;
+        cout << "Remaining capacity: " 
+            << capsuleSize - totalGuestsOnCapsule << endl << endl;
+    }
+
+
+
+    // for(int i = 1; i <= numCapsules; i++){
+    //     int totalGuests = printResults(&stack, i);
+    //     int remainingCapacity = capacity - totalGuests; 
+    //     overallGuests += totalGuests;
+    //     cout << "Remaining Capacity: " << remainingCapacity << endl;
+    //     cout << endl;
+    // }
+
+    printSummary(overallGuests, numCapsules, capsuleSize);
+    return 0;
 }
+

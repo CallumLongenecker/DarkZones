@@ -6,7 +6,7 @@ Node::Node(Node *nextNode, string stringData, int integerData)
 {
     next = nextNode;
     strData = stringData;
-    intData = intData;
+    intData = integerData;
 }
 
 // get the next element in the queue
@@ -64,4 +64,17 @@ Node *Queue::dequeue()
     this->dummy->setNext(temp->getNext());
     this->size--;
     return temp;
+}
+
+int Queue::peekNextGroup()
+{
+    if (this->size == 0)
+    {
+        return 0;
+    }
+    return dummy->getNext()->getInt();
+}
+
+bool Queue::isEmpty() {
+    return this->size==0;
 }

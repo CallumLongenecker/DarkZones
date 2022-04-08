@@ -44,6 +44,8 @@ class Queue {
         void enqueue(Node *);
         // remove the first node from the queue
         Node *dequeue();
+
+        int peekNextGroup();
         // boolean that represents whether the queue is empty or not
         bool isEmpty();
 }; 
