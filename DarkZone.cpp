@@ -36,7 +36,7 @@ void printSummary(int overallGuests, int numCapsules, int capacity){
     cout << "Overall number of capsules: " << numCapsules << endl;
     cout << "Capsule capacity: " << capacity << endl;
     float percentUtil = getPercentUtil(overallGuests, numCapsules, capacity);
-    cout << "Percentage utilization: " << overallGuests << " / (" << numCapsules << " * " << capacity << ") = " << 100.0 * percentUtil << "%" << endl;
+    cout << "Percentage utilization: " << overallGuests << " / (" << numCapsules << " * " << capacity << ") = " << setprecision(3) << 100.0 * percentUtil << "%" << endl;
 }
 
 
