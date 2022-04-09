@@ -1,3 +1,14 @@
+// File Name: DarkZone.cpp
+//
+// Authors: Callum Longenecker, Anand Valavalkar, Neal Davar
+// Date: 4/8/2022
+// Assignment Number 3
+// CS 105C Spring 2022
+// Instructor: Dr. Palacios
+//
+// This cpp file is the program that drives the
+// DarkZone project program.
+
 #include <iostream>
 #include <string>
 #include "Stack.h"
@@ -10,16 +21,36 @@
 
 using namespace std;
 
+
+//***********************************************************
+// getPercentUtil: method that returns the percent utilization
+// via a float
+//
+// overallGuests:    overall number of guests
+// numCapsules:      overall number of capsules present
+// capacity:         total capsule capacity
+// returns:          float number of percentage utilization
+//***********************************************************
 float getPercentUtil(int overallGuests, int numCapsules, int capacity){
     float result = 1.0 * (overallGuests) / (numCapsules *  capacity);
     return result;
 }
 
-//method to print the contents of the stack in order by popping off each one individually
+
+//***********************************************************
+// printResults: method to print the contents of the stack 
+// in order by popping off each one individually
+//
+// stack:         resulting stack to print results from
+// numCapsule:    current capsule number
+// returns:       int number of total guests
+//***********************************************************
 int printResults(Stack *stack, int numCapsule){
     cout << "Capsule #" << numCapsule << endl;
-   //pop off each node from the stack 
    int totalGuests = 0;
+
+   // pop off each node from the stack, printing information about
+   // each party
     while(!stack->isEmpty()){
         Node *party = stack->pop();
         string name = party->getString();
@@ -31,6 +62,14 @@ int printResults(Stack *stack, int numCapsule){
     return totalGuests;
 }
 
+//***********************************************************
+// printSummary: method to print the summary of the results
+//
+// overallGuests:    overall number of guests
+// numCapsules:      overall number of capsules present
+// capacity:         total capsule capacity
+// returns:          float number of percentage utilization
+//***********************************************************
 void printSummary(int overallGuests, int numCapsules, int capacity){
     cout << "Overall number of guests: " << overallGuests << endl;
     cout << "Overall number of capsules: " << numCapsules << endl;
@@ -41,7 +80,12 @@ void printSummary(int overallGuests, int numCapsules, int capacity){
 
 
 
-
+//***********************************************************
+// main: runs the program to run the DarkZone simulation
+// to fit people into space capsules
+//
+// returns: zero
+//***********************************************************
 int main(){
     
     int numCapsules;  
@@ -49,8 +93,8 @@ int main(){
     Stack stack {};
     int overallGuests = 0;
 
+    // infile to read in the data from the file
     ifstream infile;
-
     infile.open("darkZone.txt");
     int capsuleSize;
 
@@ -76,15 +120,14 @@ int main(){
         Node *toAdd = new Node(nullptr, name, stoi(guestAmt));
         queue.enqueue(toAdd);
     }
-
-
-
-
+    
     numCapsules = 0;
     while (!queue.isEmpty()) {
         numCapsules++;
         // schedule new capsule
         int totalGuestsOnCapsule = 0;
+
+        // iterated through the entire queue and adds contents to stack
         while (!queue.isEmpty() 
             && totalGuestsOnCapsule + queue.peekNextGroup() <= capsuleSize) 
         {
@@ -92,6 +135,8 @@ int main(){
             stack.push(queue.dequeue());
         }
         cout << "Capsule #" << numCapsules << endl;
+
+        // iterates through contents of stack and prints results and info
         while (!stack.isEmpty()) {
             Node *popResult = stack.pop();
             cout << popResult->getString() << " " 
@@ -101,17 +146,6 @@ int main(){
         cout << "Remaining capacity: " 
             << capsuleSize - totalGuestsOnCapsule << endl << endl;
     }
-
-
-
-    // for(int i = 1; i <= numCapsules; i++){
-    //     int totalGuests = printResults(&stack, i);
-    //     int remainingCapacity = capacity - totalGuests; 
-    //     overallGuests += totalGuests;
-    //     cout << "Remaining Capacity: " << remainingCapacity << endl;
-    //     cout << endl;
-    // }
-
     printSummary(overallGuests, numCapsules, capsuleSize);
     return 0;
 }

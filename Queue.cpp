@@ -1,7 +1,19 @@
+// File Name: Queue.cpp
+//
+// Authors: Callum Longenecker, Anand Valavalkar, Neal Davar
+// Date: 4/8/2022
+// Assignment Number 3
+// CS 105C Spring 2022
+// Instructor: Dr. Palacios
+//
+// This cpp file is the program that models the queue 
+// structure
+
 #include "Queue.h"
 #include <string>
 using namespace std;
 
+// Constructor for a Node
 Node::Node(Node *nextNode, string stringData, int integerData)
 {
     next = nextNode;
@@ -9,43 +21,71 @@ Node::Node(Node *nextNode, string stringData, int integerData)
     intData = integerData;
 }
 
-// get the next element in the queue
+//***********************************************************
+// getNext: gets the next element in the queue
+//
+// returns: the Node that is next in the queue
+//***********************************************************
 Node *Node::getNext() const
 {
     return this->next;
 }
 
-// get the string component of the first element in the queue
+//***********************************************************
+// getString: gets the string component of the first element in the queue
+//
+// returns: the string component of the first element in the queue
+//***********************************************************
 string Node::getString() const
 {
     return this->strData;
 }
 
-// get the int component of the first element in the queue
+//***********************************************************
+// getInt: gets the integer component of the first element in the queue
+//
+// returns: gets the integer component of the first element in the queue
+//***********************************************************
 int Node::getInt() const
 {
     return this->intData;
 }
 
-// set the next element in the queue
+//***********************************************************
+// setNext: sets the next element in the queue
+//
+// returns: nothing
+//***********************************************************
 void Node::setNext(Node *newNext)
 {
     this->next = newNext;
 }
 
-// set the string component of the next element in the queue
+//***********************************************************
+// setString: sets the string component of the first element in the queue
+//
+// returns: nothing
+//***********************************************************
 void Node::setString(string newString)
 {
     this->strData = newString;
 }
 
-// set the int component of the next element in the queue
+//***********************************************************
+// setInt: sets the integer component of the first element in the queue
+//
+// returns: nothing
+//***********************************************************
 void Node::setInt(int newInt)
 {
     this->intData = newInt;
 }
 
-// add a new node to the queue
+//***********************************************************
+// enqueue: enqueues a new element to the queue
+//
+// returns: nothing
+//***********************************************************
 void Queue::enqueue(Node *toAdd)
 {
     this->last->setNext(toAdd);
@@ -53,7 +93,11 @@ void Queue::enqueue(Node *toAdd)
     this->size++;
 }
 
-// remove the first node from the queue
+//***********************************************************
+// dequeue: dequeues the first element in the queue
+//
+// returns: the first element in the queue
+//***********************************************************
 Node *Queue::dequeue()
 {
     if (this->size == 0)
@@ -66,6 +110,11 @@ Node *Queue::dequeue()
     return temp;
 }
 
+//***********************************************************
+// peekNextGroup: peeks at the number of people in the next group
+//
+// returns: the number of people in the next group
+//***********************************************************
 int Queue::peekNextGroup()
 {
     if (this->size == 0)
@@ -75,6 +124,11 @@ int Queue::peekNextGroup()
     return dummy->getNext()->getInt();
 }
 
+//***********************************************************
+// isEmpty: checks if the queue is empty
+//
+// returns: a boolean value of whether the queue is empty
+//***********************************************************
 bool Queue::isEmpty() {
     return this->size==0;
 }
